@@ -9,14 +9,20 @@ appChildren({msgDiv: [msgDiv, rname, tBox, sendBtn]})
 addListener({sendBtn: [sendBtn, 'click', sendMsg]})
 
 let users = []
+let recvrName = ''
 
 socket.on('myName', displayName)
-socket.on('users', displayUsers)
+// socket.on('users', displayUsers)
 socket.on('user', addToUsers)
 socket.on('disconnUser', removeUser)
+socket.on('message', popMsg)
+
+function popMsg (msg) {
+  console.log(msg)
+}
 
 function sendMsg () {
-  let name = rname.value
+  let name = recvrName
   let msg = tBox.value
   socket.send([name, msg])
 }
@@ -26,19 +32,21 @@ function displayName (name) {
   appChildren ({nameDiv: [nameDiv, nameEle]})
 }
 
-function displayUsers (usrArr) {
+/* function displayUsers (usrArr) {
   let usrName
   users = usrArr
   for (let i of users) {
     usrName = newElement('p', {'id': i}, i)
+    addListener({usrName: [usrName, 'click', () => { console.log(usrName) }]})
     appChildren({usersDiv: [usersDiv, usrName]})
   }
-}
+} */
 
 function addToUsers (user) {
   users.push(user)
   let usrName = newElement('p', {'id': user}, user)
   appChildren({usersDiv: [usersDiv, usrName]})
+  addListener({usrName: [usrName, 'click', () => { recvrName = usrName.textContent }]})
 }
 
 function removeUser (user) {
