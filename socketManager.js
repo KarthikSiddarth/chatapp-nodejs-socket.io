@@ -35,16 +35,16 @@ function emitUsers (users, socket) {
 }
 
 function handleMsg (socket, msg) {
-  socket.to(usrObj[msg[0]]).send(msg[1])
   let path1 = socket.id.slice(0, 5)
   let path2 = msg[0]
   let path = `${path1}?${path2}`
   if (check(path)) {
-    write(path, msg[1])
+    write(path, `${path1}: ${msg[1]}`)
   } else {
     path = `${path2}?${path1}`
-    write(path, msg[1])
+    write(path, `${path1}: ${msg[1]}`)
   }
+  socket.to(usrObj[msg[0]]).send([path1, msg[1]])
 }
 
 module.exports = { handleConnection }

@@ -28,7 +28,7 @@ function getChat (recvrName, socket) {
         socket.emit('chats', chunk.toString())
       })
     } else {
-      console.log('its no where')
+      socket.emit('chats', '')
     }
   }
 }

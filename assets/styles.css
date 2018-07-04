@@ -1,0 +1,22 @@
+body {
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+  
+}
+
+#usersDiv {
+  flex: 1 1 25%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+
+#chatDiv {
+  min-height: 100vh;
+  flex: 3 1 75%;
+  display: flex;
+  flex-flow: column-wrap;
+  justify-content: space-between;
+}

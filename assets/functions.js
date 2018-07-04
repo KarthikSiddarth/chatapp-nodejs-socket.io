@@ -40,3 +40,11 @@ function addListener (evntObj) {
     }
   }
 }
+
+function removeChildren (element) {
+  if (element) {
+    while (element.firstChild) {
+      element.removeChild(element.firstChild)
+    }
+  }
+}

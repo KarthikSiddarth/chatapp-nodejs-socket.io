@@ -1,9 +1,10 @@
 let nameDiv = newElement('div', {'id': 'nameDiv'})
 let usersDiv = newElement('div', {'id': 'usersDiv'})
 let msgDiv = newElement('div', {'id': 'msgDiv'})
+let chatDiv = newElement('div', {'id': 'chatDiv'})
 let tBox = newElement('input', {'id': 'tBox'})
 let sendBtn = newElement('button', {'id': 'sendBtn'}, 'send')
-appChildren ({body: [body, nameDiv, usersDiv, msgDiv]})
+appChildren ({body: [body, nameDiv, chatDiv, usersDiv, msgDiv]})
 appChildren({msgDiv: [msgDiv, tBox, sendBtn]})
 addListener({sendBtn: [sendBtn, 'click', sendMsg]})
 
@@ -14,16 +15,30 @@ socket.on('myName', displayName)
 socket.on('user', addToUsers)
 socket.on('disconnUser', removeUser)
 socket.on('message', popMsg)
-socket.on('chats', (msg) => { console.log(msg) })
+socket.on('chats', popChat)
 
 function popMsg (msg) {
-  console.log(msg)
+  if (recvrName === msg[0]) {
+  let chatMsg = newElement('p', {}, `${msg[0]}: ${msg[1]}`)
+  appChildren({chatDiv: [chatDiv, chatMsg]})
+  }
+}
+
+function popChat (msg) {
+  removeChildren(chatDiv)
+  let chatArr = msg.split('\n')
+  for (let i of chatArr) {
+    let chatMsg = newElement('p', {}, i)
+    appChildren({chatDiv: [chatDiv, chatMsg]})
+  }
 }
 
 function sendMsg () {
   let name = recvrName
   let msg = `${new Date().toString().slice(16, 24)} ${tBox.value}`
   socket.send([name, msg])
+  let chatMsg = newElement('p', {}, msg)
+  appChildren({chatDiv: [chatDiv, chatMsg]})
 }
 
 function displayName (name) {
