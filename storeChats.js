@@ -16,13 +16,17 @@ function checkFile (path) {
 function getChat (recvrName, socket) {
   let path1 = socket.id.slice(0, 5)
   let path2 = recvrName
-  let path = `${path1}?${path2}` 
+  let path = `${path1}?${path2}`
   if (checkFile(path)) {
-    console.log('its here 1')
+    fs.createReadStream(`./chats/${path}.txt`).on('data', (chunk) => {
+      socket.emit('chats', chunk.toString())
+    })
   } else {
     path = `${path2}?${path1}`
     if (checkFile(path)) {
-      console.log('its here 2')
+      fs.createReadStream(`./chats/${path}.txt`).on('data', (chunk) => {
+        socket.emit('chats', chunk.toString())
+      })
     } else {
       console.log('its no where')
     }

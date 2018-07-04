@@ -14,6 +14,7 @@ socket.on('myName', displayName)
 socket.on('user', addToUsers)
 socket.on('disconnUser', removeUser)
 socket.on('message', popMsg)
+socket.on('chats', (msg) => { console.log(msg) })
 
 function popMsg (msg) {
   console.log(msg)
