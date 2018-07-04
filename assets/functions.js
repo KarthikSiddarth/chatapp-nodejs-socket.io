@@ -24,6 +24,14 @@ function appChildren (eleObj) {
   }
 }
 
+function removeChild (ele) {
+  if (ele) {
+    let parentEle = ele.shift()
+    let child = document.getElementById(ele[0])
+    parentEle.removeChild(child)
+  }
+}
+
 function addListener (evntObj) {
   if (evntObj) {
     for (let i in evntObj) {

@@ -1,46 +1,21 @@
-const https = require('https')
-
-const options = {
-  hostname: 'uinames.com',
-  path: '/api/?amount=1',
-  method: 'GET'
-}
-
-let users = {}
-let usrArr = []
-
-function getName (socket) {
-  let name = ''
-  const req = https.request(options, (res) => {
-    res.on('data', (chunk) => {
-      name += chunk
-    })
-    res.on('end', () => {
-      name = JSON.parse(name).name
-      users[socket.id] = name
-      usrArr.push(name)
-      console.log(users)
-      socket.broadcast.emit('users', usrArr)
-      socket.emit('myName', name)
-      socket.emit('users', usrArr)
-    })
-  })
-
-  req.end()
-}
+let users = []
 
 function listener (socket) {
   socket.on('disconnect', () => { handleDisconn(socket) })
+  socket.on('message', () => { handleMsg(socket) })
 }
 
 function handleDisconn (socket) {
-  delete users[socket.id]
-  socket.broadcast.emit('disconnUser', socket.id)
-  console.log(users)
+  let usr = socket.id.slice(0, 5)
+  users.splice(users.indexOf(usr), 1)
+  socket.broadcast.emit('disconnUser', socket.id.slice(0, 5))
 }
 
 function handleConnection (socket) {
-  getName(socket)
+  users.push(socket.id.slice(0, 5))
+  socket.broadcast.emit('user', socket.id.slice(0, 5))
+  socket.emit('myName', socket.id.slice(0, 5))
+  socket.emit('users', users)
   listener(socket)
 }
 
