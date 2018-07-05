@@ -2,9 +2,9 @@ let nameDiv = newElement('div', {'id': 'nameDiv'})
 let usersDiv = newElement('div', {'id': 'usersDiv'})
 let msgDiv = newElement('div', {'id': 'msgDiv'})
 let chatDiv = newElement('div', {'id': 'chatDiv'})
-let tBox = newElement('input', {'id': 'tBox'})
+let tBox = newElement('input', {'id': 'tBox', 'placeholder': 'Enter your message'})
 let sendBtn = newElement('button', {'id': 'sendBtn'}, 'send')
-appChildren ({body: [body, nameDiv, chatDiv, usersDiv, msgDiv]})
+appChildren ({body: [body, nameDiv, usersDiv, chatDiv, msgDiv]})
 appChildren({msgDiv: [msgDiv, tBox, sendBtn]})
 addListener({sendBtn: [sendBtn, 'click', sendMsg]})
 
@@ -35,20 +35,21 @@ function popChat (msg) {
 
 function sendMsg () {
   let name = recvrName
-  let msg = `${new Date().toString().slice(16, 24)} ${tBox.value}`
+  let msg = `${new Date().toString().slice(16, 24)}: ${tBox.value}`
   socket.send([name, msg])
-  let chatMsg = newElement('p', {}, msg)
+  let chatMsg = newElement('p', {}, `${socket.id.slice(0, 5)}: ${msg}`)
+  tBox.value = ''
   appChildren({chatDiv: [chatDiv, chatMsg]})
 }
 
 function displayName (name) {
-  let nameEle = newElement('p', {'id': name}, name)
+  let nameEle = newElement('p', {'id': name, 'class': 'userName'}, `Your name is ${name}`)
   appChildren ({nameDiv: [nameDiv, nameEle]})
 }
 
 function addToUsers (user) {
   users.push(user)
-  let usrName = newElement('p', {'id': user}, user)
+  let usrName = newElement('p', {'id': user, 'class': 'user'}, user)
   appChildren({usersDiv: [usersDiv, usrName]})
   addListener({usrName: [usrName, 'click', () => {
     recvrName = usrName.textContent
