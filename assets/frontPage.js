@@ -2,14 +2,17 @@ let nameDiv = newElement('div', {'id': 'nameDiv'})
 let usersDiv = newElement('div', {'id': 'usersDiv'})
 let msgDiv = newElement('div', {'id': 'msgDiv'})
 let chatDiv = newElement('div', {'id': 'chatDiv'})
+let usrTitleBar = newElement('p', {'class': 'user titleBar'}, 'users online')
 let tBox = newElement('input', {'id': 'tBox', 'placeholder': 'Enter your message'})
 let sendBtn = newElement('button', {'id': 'sendBtn'}, 'send')
 appChildren ({body: [body, nameDiv, usersDiv, chatDiv, msgDiv]})
+appChildren({usersDiv: [usersDiv, usrTitleBar]})
 appChildren({msgDiv: [msgDiv, tBox, sendBtn]})
 addListener({sendBtn: [sendBtn, 'click', sendMsg]})
 
 let users = []
 let recvrName = ''
+let activeEle = body
 
 socket.on('myName', displayName)
 socket.on('user', addToUsers)
@@ -19,7 +22,7 @@ socket.on('chats', popChat)
 
 function popMsg (msg) {
   if (recvrName === msg[0]) {
-  let chatMsg = newElement('p', {}, `${msg[0]}: ${msg[1]}`)
+  let chatMsg = newElement('p', {'class': 'chats'}, `${msg[0]}: ${msg[1]}`)
   appChildren({chatDiv: [chatDiv, chatMsg]})
   }
 }
@@ -28,7 +31,7 @@ function popChat (msg) {
   removeChildren(chatDiv)
   let chatArr = msg.split('\n')
   for (let i of chatArr) {
-    let chatMsg = newElement('p', {}, i)
+    let chatMsg = newElement('p', {'class': 'chats'}, i)
     appChildren({chatDiv: [chatDiv, chatMsg]})
   }
 }
@@ -37,7 +40,7 @@ function sendMsg () {
   let name = recvrName
   let msg = `${new Date().toString().slice(16, 24)}: ${tBox.value}`
   socket.send([name, msg])
-  let chatMsg = newElement('p', {}, `${socket.id.slice(0, 5)}: ${msg}`)
+  let chatMsg = newElement('p', {'class': 'chats'}, `${socket.id.slice(0, 5)}: ${msg}`)
   tBox.value = ''
   appChildren({chatDiv: [chatDiv, chatMsg]})
 }
@@ -48,14 +51,19 @@ function displayName (name) {
 }
 
 function addToUsers (user) {
-  users.push(user)
-  let usrName = newElement('p', {'id': user, 'class': 'user'}, user)
-  appChildren({usersDiv: [usersDiv, usrName]})
-  addListener({usrName: [usrName, 'click', () => {
-    recvrName = usrName.textContent
-    socket.emit('get', recvrName)
-  }]
-  })
+  if (user !== socket.id.slice(0, 5)) {
+    users.push(user)
+    let usrName = newElement('p', {'id': user, 'class': 'user'}, user)
+    appChildren({usersDiv: [usersDiv, usrName]})
+    addListener({usrName: [usrName, 'click', () => {
+      activeEle.classList.remove('on')
+      usrName.classList.add('on')
+      activeEle = usrName
+      recvrName = usrName.textContent
+      socket.emit('get', recvrName)
+    }]
+    })
+  }
 }
 
 function removeUser (user) {
