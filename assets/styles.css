@@ -9,7 +9,7 @@
   background-color: #1565C0;
   color: #FFFFFF;
   float: left;
-  width: 84.01%;
+  width: 84.51%;
 }
 
 #chatDiv {
@@ -40,7 +40,7 @@
   float: left;
   width: 90%;
   height: 90%;
-  padding-left: 10px;
+  padding-left: 20px;
   font-weight: bold;
   font-size: 120%;
   border-radius: 10px;
@@ -59,15 +59,9 @@
 
 .user {
   text-align: center;
-  /* border: 1px solid black;
-  border-top: 0.25px solid black;
-  border-bottom: 0.25px solid black; */
   margin-top: 2px;
   padding: 10px;
   box-shadow: 0px 0px 2px black;
-}
-
-.titleBar { 
 }
 
 .userName {
@@ -76,14 +70,23 @@
 
 .chats {
   background-color: #ABB7B7;
-  margin: 0 auto;
   margin-top: 2px;
   padding-left: 10px;
-  width: 75%;
+  padding-top: 5px;
+  padding-right: 10px;
   border-radius: 5px;
+  float: left;
+  height: 30px;
+  width: 75%;
 }
 
 .on {
   background-color: #FF5252;
   color: white;
+}
+
+.received {
+  float: right;
+  margin-top: 2px;
+  text-align: right;
 }
