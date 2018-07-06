@@ -69,15 +69,11 @@ function getRecvrName (usrName) {
   usrName.classList.add('on')
   activeEle = usrName
   recvrName = usrName.textContent
-  socket.emit('get', recvrName)
+  socket.emit('retrieveChat', recvrName)
 }
 
 
 function removeUser (user) {
   users.splice(users.indexOf(user), 1)
   removeChild([usersDiv, user])
-}
-
-function getChat () {
-  socket.emit('get')
 }

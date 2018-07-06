@@ -6,7 +6,7 @@ let usrObj = {}
 function listener (socket) {
   socket.on('disconnect', () => { handleDisconn(socket) })
   socket.on('message', (msg) => { handleMsg(socket, msg) })
-  socket.on('get', (recvrName) => { getChat(recvrName, socket) })
+  socket.on('retrieveChat', (recvrName) => { getChat(recvrName, socket) })
 }
 
 function handleDisconn (socket) {
