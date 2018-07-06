@@ -1,7 +1,4 @@
-const store = require('./storeChats.js')
-const write = store.writeChat
-const check = store.checkFile
-const getChat = store.getChat
+const { writeChat, checkFile, getChat } = require('./storeChats.js')
 
 let users = []
 let usrObj = {}
@@ -15,7 +12,7 @@ function listener (socket) {
 function handleDisconn (socket) {
   let usr = socket.id.slice(0, 5)
   users.splice(users.indexOf(usr), 1)
-  socket.broadcast.emit('disconnUser', socket.id.slice(0, 5))
+  socket.broadcast.emit('disconnUser', usr)
 }
 
 function handleConnection (socket) {
@@ -38,13 +35,13 @@ function handleMsg (socket, msg) {
   let path1 = socket.id.slice(0, 5)
   let path2 = msg[0]
   let path = `${path1}?${path2}`
-  if (check(path)) {
-    write(path, `${path1}: ${msg[1]}`)
+  if (checkFile(path)) {
+    writeChat(path, `${path1}: ${msg[1]}`)
   } else {
     path = `${path2}?${path1}`
-    write(path, `${path1}: ${msg[1]}`)
+    writeChat(path, `${path1}: ${msg[1]}`)
   }
-  socket.to(usrObj[msg[0]]).send([path1, msg[1]])
+  socket.to(usrObj[path2]).send([path1, msg[1]])
 }
 
 module.exports = { handleConnection }

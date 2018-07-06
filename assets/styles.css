@@ -17,6 +17,7 @@
   background-color: #22313F;
   padding: 10px;
   clear: left;
+  overflow: scroll;
 }
 
 #usersDiv {
@@ -66,8 +67,7 @@
   box-shadow: 0px 0px 2px black;
 }
 
-.activeUser {
-
+.titleBar { 
 }
 
 .userName {
