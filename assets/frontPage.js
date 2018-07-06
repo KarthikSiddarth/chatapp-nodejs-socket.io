@@ -25,6 +25,7 @@ function populateMsg (msg) {
   if (recvrName === msg[0]) {
     let chatMsg = newElement('p', {'class': 'chats'}, `${msg[0]}: ${msg[1]}`)
     appChildren({chatDiv: [chatDiv, chatMsg]})
+    chatMsg.classList.add('received')
   }
 }
 
@@ -32,8 +33,12 @@ function populateChat (msg) {
   removeChildren(chatDiv)
   let chatArr = msg.split('\n')
   for (let i of chatArr) {
+    if (i === '') { continue }
     let chatMsg = newElement('p', {'class': 'chats'}, i)
     appChildren({chatDiv: [chatDiv, chatMsg]})
+    if (i.slice(0, 5) !== socket.id.slice(0, 5)) {
+      chatMsg.classList.add('received')
+    }
   }
 }
 
@@ -41,8 +46,9 @@ function composeMsg () {
   let name = recvrName
   let msg = `${new Date().toString().slice(16, 24)}: ${tBox.value}`
   sendMsg(name, msg)
-  let chatMsg = newElement('p', {'class': 'chats'}, `${socket.id.slice(0, 5)}: ${msg}`)
   tBox.value = ''
+  if (activeEle === body) { return }
+  let chatMsg = newElement('p', {'class': 'chats'}, `${socket.id.slice(0, 5)}: ${msg}`)
   appChildren({chatDiv: [chatDiv, chatMsg]})
 }
 
@@ -56,12 +62,11 @@ function displayName (name) {
 }
 
 function addToUsers (user) {
-  if (user !== socket.id.slice(0, 5)) {
-    users.push(user)
-    let usrName = newElement('p', {'id': user, 'class': 'user'}, user)
-    appChildren({usersDiv: [usersDiv, usrName]})
-    addListener({usrName: [usrName, 'click', () => { getRecvrName(usrName) }]})
-  }
+  if (user === socket.id.slice(0, 5)) { return }
+  users.push(user)
+  let usrName = newElement('p', {'id': user, 'class': 'user'}, user)
+  appChildren({usersDiv: [usersDiv, usrName]})
+  addListener({usrName: [usrName, 'click', () => { getRecvrName(usrName) }]})
 }
 
 function getRecvrName (usrName) {
