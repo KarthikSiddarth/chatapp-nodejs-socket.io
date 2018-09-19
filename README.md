@@ -1,4 +1,6 @@
-A minimal chat app built
+# Chat App built using NodeJS and Socket.io
+
+A Minimal chat app
 
 Backend stack: NodeJS and Socket.io
 
