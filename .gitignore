@@ -1,2 +1,3 @@
 chats
 node_modules
+*.log

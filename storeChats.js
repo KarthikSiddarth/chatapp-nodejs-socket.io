@@ -1,5 +1,7 @@
 const fs = require('fs')
 
+fs.mkdirSync('./chats')
+
 function writeChat (path, msg) {
   fs.appendFile(`./chats/${path}.txt`, `${msg}\n`, (err) => { if (err) { console.log(err) } })
 }
