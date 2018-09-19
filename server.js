@@ -3,7 +3,9 @@ const fs = require('fs').createReadStream
 const io = require('socket.io')(http)
 const handleConn = require('./socketManager.js').handleConnection
 
-http.listen(2001, '0.0.0.0')
+const port = process.env.PORT || 2001
+
+http.listen(port)
 
 http.on('request', handler)
 
